@@ -1,16 +1,8 @@
 # parsers.py
 # Responsável por: extrair dados do HTML bruto.
 
-import os, re, json
-from dotenv import load_dotenv
-from urllib.parse import urlparse
-
 from bs4 import BeautifulSoup
 
-from client import fetch_page
-
-
-load_dotenv()
 
 def debug(content):
     with open("debug.html", "wb") as f:
@@ -47,7 +39,7 @@ def extract_card(card):
     except:
         return None
 
-def extract_itens(data):
+def extract_index(soup_data):
     # Playlists (ex: Todo Mundo em Pânico) -> #carousel_playlist1 .card
     sections = {
         "destaque": ".home__carousel .card",
@@ -60,19 +52,56 @@ def extract_itens(data):
     result = {}
 
     for name, selector in sections.items():
-        result[name] = extract_section(data, selector)
+        result[name] = extract_section(soup_data, selector)
 
-    # json.dumps(result, indent=4, ensure_ascii=False)
     return result
 
-def extract_details(data):
+def extract_movies(soup_data):
+    result = []
+    cards = soup_data.select(".card")
+    for card in cards:
+        result.append({
+            "title": card.find("h3", class_="card__title").text.strip(),
+            "genre": card.find("span", class_="card__category").text.split(",")[0].strip(),
+            "quality": card.find("div", class_="tags-top").text.strip() if card.find("div", class_="tags-top") else None,
+            "year": card.find("span", class_="card__category").text.strip().split(",")[1].strip(),
+            "rating": card.find("span", class_="card__rate").text.strip() if card.find("span", class_="card__rate") else None,
+            "link": card.find("a")["href"],
+            "image": (
+                card.find("img").get("data-src") or
+                card.find("img").get("src")
+            )
+        })
+    return result
+
+def extract_series(soup_data):
+    result = []
+    cards = soup_data.select(".catalog .container .card")
+    for card in cards:
+        ano = card.find("span", class_="card__category").find_all("a")
+        year = ano[1].text.strip() if len(ano) > 1 else ano[0].text.strip()
+
+        result.append({
+            "title": card.find("h3", class_="card__title").text.strip(),
+            "genre": card.find("span", class_="card__category").find_all("a")[0].text.strip(),
+            "year": year,
+            "rating": card.find("span", class_="card__rate").text.strip() if card.find("span", class_="card__rate") else None,
+            "link": card.find("a")["href"],
+            "image": (
+                card.find("img").get("data-src") or
+                card.find("img").get("src")
+            )
+        })
+    return result
+
+def extract_details(soup_data):
     try:
-        title = data.find("h1", attrs={"class": "section__title"})
-        rating = data.find("span", attrs={"class": "card__rate"})
-        image = data.select(".card--details picture")[0].find("img")
-        details = data.select(".card__content .card__meta")
-        meta_items = data.select(".card__meta li")
-        sinopse = data.select(".card__description")
+        title = soup_data.find("h1", attrs={"class": "section__title"})
+        rating = soup_data.find("span", attrs={"class": "card__rate"})
+        image = soup_data.select(".card--details picture")[0].find("img")
+        details = soup_data.select(".card__content .card__meta")
+        meta_items = soup_data.select(".card__meta li")
+        sinopse = soup_data.select(".card__description")
 
         genre = None
         year = None
@@ -105,18 +134,3 @@ def extract_details(data):
     except Exception as e:
         print(e)
         return None
-
-def start():
-    url = f"{os.getenv('URL')}"
-    data = fetch_page(url)
-    if not data:
-        return data
-    debug(data)
-    links = extract_itens(soup(data))
-    print(links)
-
-
-
-if __name__ == "__main__":
-    os.system("clear")
-    start()
