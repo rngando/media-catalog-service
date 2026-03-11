@@ -41,25 +41,25 @@ def normalize_data_index(movie_list):
     result = {
         "total": sum(len(movies) for movies in normalized_dict.values()),
         "status": "success",
-        "colection": normalized_dict
+        "collection": normalized_dict
     }
     return result
 
 def normalize_data_movies(movie_list):
     normalized_movies = []
     
-    for movie in movie_list:
-        clean_data = movie.copy()
+    # for movie in movie_list:
+    clean_data = movie_list.copy()
 
-        clean_data["year"] = clean_year(movie.get("year"))
-        clean_data["rating"] = clean_rating(movie.get("rating"))
-        clean_data["title"] = movie.get("title", "").title()
-        normalized_movies.append(clean_data)
+    clean_data["year"] = clean_year(movie_list.get("year"))
+    clean_data["rating"] = clean_rating(movie_list.get("rating"))
+    clean_data["title"] = movie_list.get("title", "").title()
+    normalized_movies.append(clean_data)
     
     result = {
         "total": len(normalized_movies),
         "status": "success",
-        "colection": normalized_movies
+        "collection": normalized_movies
     }
     return result
 
@@ -77,6 +77,6 @@ def normalize_data_series(series_list):
     result = {
         "total": len(normalized_series),
         "status": "success",
-        "colection": normalized_series
+        "collection": normalized_series
     }
     return result

@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 
 
 load_dotenv()
-index_router = APIRouter(prefix="/index", tags=["index"])
+index_router = APIRouter(tags=["index"])
 
 @index_router.get("/")
 def get_index():

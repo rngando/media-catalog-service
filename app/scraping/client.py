@@ -24,8 +24,8 @@ def fetch_page(url, method="GET", data=None):
         res.raise_for_status()
         return res.content
     except (RequestException, Timeout) as e:
-        print(f"Erro de conexão: {e}")
+        # print(f"Erro de conexão: {e}")
         return None
     except Exception as e:
-        print(f"Erro inesperado: {e}")
+        # print(f"Erro inesperado: {e}")
         return None
