@@ -1,0 +1,43 @@
+# Python
+# Byte-code files
+*.pyc
+__pycache__/
+
+# Distribution / packaging
+.Python
+build/
+dist/
+wheels/
+*.egg-info/
+*.egg
+
+# Environments
+.env
+
+.venv
+venv/
+env/
+# specific lock files can also be ignored for libraries, but often included for apps
+# Pipfile.lock
+# poetry.lock
+# uv.lock
+
+# Editors and IDEs
+# specific files for common editors and IDEs like VS Code and PyCharm
+.idea/         # PyCharm
+.vscode/       # VS Code (consider including launch.json if it has shared value)
+*.swp
+*.sublime-project
+*.sublime-workspace
+
+# Testing and coverage
+.coverage
+.tox/
+htmlcov/
+
+# Specific OS/Editor files
+.DS_Store      # macOS
+thumbs.db      # Windows
+
+# Misc
+.python-version # generally better to specify version range in README
