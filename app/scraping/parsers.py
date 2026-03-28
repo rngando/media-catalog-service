@@ -279,3 +279,23 @@ def extract_details_season(soup_data):
     except Exception as e:
         print(e)
         return None
+
+# ################################ #
+#         Dados de Pesquisa        #
+# ################################ #
+def extract_search(soup_data):
+    """ Extrai os dados de pesquisa da página usando o seletor CSS definido. Retorna uma lista de itens de pesquisa extraídos."""
+    result = []
+    cards = soup_data.select(".card")
+    for card in cards:
+        result.append({
+            "title": card.find("h3", class_="card__title").text.strip(),
+            "genre": card.find("span", class_="card__category").text.split(",")[0].strip(),
+            "year": card.find("span", class_="card__category").text.strip().split(",")[-1].strip(),
+            "id": card.find("a")["href"].split("/")[-1],
+            "image": (
+                card.find("img").get("data-src") or
+                card.find("img").get("src")
+            )
+        })
+    return result

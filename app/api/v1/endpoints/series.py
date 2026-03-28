@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 
 
 load_dotenv()
-series_router = APIRouter(prefix="/series", tags=["series"])
+series_router = APIRouter(prefix="/series", tags=["Séries"])
 
 @series_router.get("/", summary="Listar Séries", response_description="Lista de séries normalizada")
 def get_series():

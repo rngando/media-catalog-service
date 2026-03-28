@@ -14,9 +14,9 @@ from fastapi.responses import JSONResponse
 
 
 load_dotenv()
-movies_router = APIRouter(prefix="/movies", tags=["movies"])
+movies_router = APIRouter(prefix="/movies", tags=["Filmes"])
 
-@movies_router.get("/", summary="Listar Filmes", response_description="Lista de filmes normalizada")
+@movies_router.get("/", summary="Listar Filmes")
 def get_movies():
     """
         Lista todos os filmes disponíveis na página de listagem.

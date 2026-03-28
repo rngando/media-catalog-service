@@ -13,7 +13,7 @@ from fastapi.responses import JSONResponse
 load_dotenv()
 index_router = APIRouter(tags=["index"])
 
-@index_router.get("/")
+@index_router.get("/", summary="Obter Índice Principal")
 def get_index():
     index_data = fetch_page(f"{os.getenv('URL')}")
     if not index_data:
