@@ -1,7 +1,5 @@
 
-import os
-from dotenv import load_dotenv
-
+from core import URL
 from scraping.client import fetch_page
 from scraping.parsers import soup, extract_search
 from scraping.normalizer import normalize_data_movies
@@ -10,7 +8,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 
-load_dotenv()
+
 search_router = APIRouter(prefix="/search", tags=["Busca"])
 
 @search_router.get("/", summary="Buscar Filmes/Séries", response_description="Resultados de busca normalizados")
@@ -24,7 +22,7 @@ def search(query: str):
         Returns:
             JSONResponse: Uma lista de resultados de busca normalizados ou erro 500.
     """
-    url = f"{os.getenv('URL')}/busca?q={query}"
+    url = f"{URL}/busca?q={query}"
     page_content = fetch_page(url)
     if not page_content:
         return JSONResponse(

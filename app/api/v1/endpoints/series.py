@@ -1,7 +1,5 @@
 
-import os
-from dotenv import load_dotenv
-
+from core import URL
 from scraping.client import fetch_page
 from scraping.normalizer import normalize_data_series
 from scraping.parsers import soup, extract_series, extract_details_series, extract_details_season
@@ -11,7 +9,6 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 
-load_dotenv()
 series_router = APIRouter(prefix="/series", tags=["Séries"])
 
 @series_router.get("/", summary="Listar Séries", response_description="Lista de séries normalizada")
@@ -24,7 +21,7 @@ def get_series():
             JSONResponse: Uma lista de objetos de séries formatados ou 
             um erro 500 caso a conexão com a fonte falhe.
     """
-    series_data = fetch_page(f"{os.getenv('URL')}/series-todas")
+    series_data = fetch_page(f"{URL}/series-todas")
     if not series_data:
         # return {"error": "Failed to fetch series data"}, 500
         return JSONResponse(
@@ -54,7 +51,7 @@ def get_series_by_id(series_id):
         Returns:
             JSONResponse: Objeto com os detalhes da série ou erro 404/500.
     """
-    url = f"{os.getenv('URL')}/serie/{series_id}"
+    url = f"{URL}/serie/{series_id}"
     serie_data = fetch_page(url)
     if not serie_data:
         return JSONResponse(
@@ -80,7 +77,7 @@ def get_series_details(season_id, season_number):
         Returns:
             JSONResponse: Objeto com os detalhes específicos da série ou erro 404/500.
     """
-    url = f"{os.getenv('URL')}/serie/{season_id}/temporada-{season_number}"
+    url = f"{URL}/serie/{season_id}/temporada-{season_number}"
     serie_data = fetch_page(url)
     if not serie_data:
         return JSONResponse(

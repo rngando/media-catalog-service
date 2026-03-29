@@ -1,7 +1,5 @@
 
-import os
-from dotenv import load_dotenv
-
+from core import URL
 from scraping.client import fetch_page
 from scraping.parsers import soup, extract_categories
 from scraping.normalizer import normalize_data_movies
@@ -10,7 +8,6 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 
-load_dotenv()
 categoria_router = APIRouter(prefix="/categoria", tags=["Categoria"])
 VALID_CATEGORIES = {'acao', 'animacao', 'aventura', 'comedia', 'crime', 'documentario', 'drama', 'familia', 'fantasia', 'faroeste', 'ficcao-cientifica', 'guerra', 'historia', 'misterio', 'romance', 'terror', 'thriller'}
 
@@ -22,7 +19,7 @@ def categoria(category):
             status_code=404
         )
 
-    url = f"{os.getenv('URL')}/categoria/{category}"
+    url = f"{URL}/categoria/{category}"
     page_contente = fetch_page(url)
     if not page_contente:
         return JSONResponse(

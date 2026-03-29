@@ -1,9 +1,5 @@
-# app/api/v1/endpoints/movies.py
-# Responsável por: definir as rotas relacionadas a filmes.
 
-import os
-from dotenv import load_dotenv
-
+from core import URL
 from scraping.client import fetch_page
 from scraping.normalizer import normalize_data_movies
 from scraping.parsers import soup, extract_movies, extract_details_movie, get_link_movie
@@ -13,7 +9,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 
-load_dotenv()
+
 movies_router = APIRouter(prefix="/movies", tags=["Filmes"])
 
 @movies_router.get("/", summary="Listar Filmes")
@@ -28,7 +24,7 @@ def get_movies():
             JSONResponse: Uma lista de objetos de filmes formatados ou 
             um erro 500 caso a conexão com a fonte falhe.
     """
-    movie_data = fetch_page(f"{os.getenv('URL')}/listaFilmes")
+    movie_data = fetch_page(f"{URL}/listaFilmes")
     if not movie_data:
         # return {"error": "Failed to fetch movie data"}, 500
         return JSONResponse(
@@ -58,7 +54,7 @@ def get_movies_by_id(movies_id: str):
         Returns:
             JSONResponse: Objeto com os detalhes do filme ou erro 404/500.
     """
-    url = f"{os.getenv('URL')}/filme/{movies_id}" 
+    url = f"{URL}/filme/{movies_id}" 
     movie_data = fetch_page(url)
     
     if not movie_data:
@@ -72,7 +68,7 @@ def get_movie_video_link(movies_id: str = Path(...)):
     """
         Obtém o link direto do vídeo de um filme específico. 
     """
-    url = f"{os.getenv('URL')}/filme/{movies_id.split('/')[0]}"
+    url = f"{URL}/filme/{movies_id.split('/')[0]}"
     page_html = fetch_page(url)
 
     if not page_html:
