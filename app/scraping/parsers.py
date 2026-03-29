@@ -299,3 +299,24 @@ def extract_search(soup_data):
             )
         })
     return result
+
+# ################################ #
+#        Dados de Categoria        #
+# ################################ #
+def extract_categories(soup_data):
+    # ['acao', 'animacao', 'aventura', 'comedia', 'crime', 'documentario', 'drama', 'familia', 'fantasia', 'faroeste', 'ficcao-cientifica', 'guerra', 'historia', 'misterio', 'romance', 'terror', 'thriller']
+    result = []
+    cards = soup_data.select(".card")
+    for card in cards:
+        result.append({
+            "title": card.find("h3", class_="card__title").text.strip(),
+            "genre": card.find("span", class_="span-category").text.strip(),
+            "year": card.find("span", class_="span-year").text.strip(),
+            "rating":card.find("span", class_="card__rate").text.strip(),
+            "id": card.find("a")["href"].split("/")[-1],
+            "image": (
+                card.find("img").get("data-src") or
+                card.find("img").get("src")
+            )
+        })
+    return result

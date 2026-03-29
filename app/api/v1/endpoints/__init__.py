@@ -5,3 +5,4 @@ from .index import index_router
 from .movies import movies_router
 from .series import series_router
 from .search import search_router
+from .genres import categoria_router
